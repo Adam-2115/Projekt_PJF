@@ -5,7 +5,7 @@ from settings import SCREEN_WIDTH, SCREEN_HEIGHT
 class MapManager:
     def __init__(self):
         self.folder = "mapy"
-        # Mapy z Twojego folderu
+        # Mapy z folderu 'mapy'
         self.map_files = {
             "fulda": "fulda.jpg",
             "debe_wielkie": "debe_wielkie.jpg",

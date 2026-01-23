@@ -11,16 +11,18 @@ class UnitTemplate:
         self.inf_power = inf_power; 
         self.rank = rank
         
+    # Metoda do pobrania siły ognia jednostki
     def get_firepower(self):
         return round(self.tanks * self.tank_power + self.apc * self.apc_power + self.soldiers * self.inf_power, 0)
 
+# Szablony jednostek
 TEMPLATES = {
     "PACT": {
         "PANCERNY": UnitTemplate("Batalion Pancerny T-72A", 54, 6, 10, 300, 1.2, 2.4, 0.4, 0.05, 2),
         "ZMECHANIZOWANY": UnitTemplate("Batalion Zmechanizowany", 15, 40, 40, 400, 1.0, 2.0, 1.1, 0.10, 2),
         "KOMPANIA_PANC": UnitTemplate("Kompania Pancerna T-72A", 18, 2, 3, 100, 1.2, 2.4, 0.4, 0.05, 1),
         "KOMPANIA_ZMECH": UnitTemplate("Kompania Zmechanizowana", 5, 13, 13, 130, 1.0, 2.0, 1.1, 0.10, 1),
-        "PIECHOTA": UnitTemplate("Pułk Piechoty", 0, 20, 100, 1200, 0.6, 0.0, 0.3, 0.12, 2),
+        "PIECHOTA": UnitTemplate("Batalion Piechoty", 0, 20, 100, 1200, 0.6, 0.0, 0.3, 0.12, 2),
     },
     "NATO": {
         "PANCERNY": UnitTemplate("Batalion Pancerny M1 Abrams", 45, 8, 10, 300, 1.3, 3.5, 0.5, 0.05, 2),
