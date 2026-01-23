@@ -31,17 +31,18 @@ class GeneralEngine:
 
     def run(self):
         while True:
-            m_pos = pygame.mouse.get_pos()
-            events = pygame.event.get()
-            
+            m_pos = pygame.mouse.get_pos(); events = pygame.event.get()
             for event in events:
                 if event.type == pygame.QUIT: pygame.quit(); sys.exit()
                 
                 res = self.current_state.handle_events(event, m_pos)
                 if res:
+                    # RESET PRZY POWROCIE DO MENU
+                    if res == "MENU":
+                        self.ctx.reset_skirmish()
+                    
                     if res == "PAUSE":
-                        state_to_save = "BATTLE" if self.current_state == self.states["BATTLE"] else "DEPLOYMENT"
-                        self.prev_state_key = state_to_save
+                        self.prev_state_key = "BATTLE" if self.current_state == self.states["BATTLE"] else "DEPLOYMENT"
                         self.states["PAUSE"] = PauseState(self.ctx, self.prev_state_key)
                         self.current_state = self.states["PAUSE"]
                     elif res in self.states:
@@ -54,25 +55,15 @@ class GeneralEngine:
                     self.current_state = self.states["GAMEOVER"]
 
             self.screen.fill((0, 0, 0))
-            
-            p_s = self.states.get("PAUSE")
-            g_s = self.states.get("GAMEOVER")
-            e_s = self.states.get("EXIT_PROMPT")
-            
+            p_s, g_s, e_s = self.states.get("PAUSE"), self.states.get("GAMEOVER"), self.states.get("EXIT_PROMPT")
             if self.current_state in [p_s, g_s]:
-                if self.prev_state_key == "BATTLE" or self.current_state == g_s:
-                    self.states["BATTLE"].draw(m_pos)
-                else:
-                    self.states["DEPLOYMENT"].draw(m_pos)
-                self.current_state.draw(m_pos)
+                self.states["BATTLE"].draw(m_pos); self.current_state.draw(m_pos)
             elif self.current_state == e_s:
-                self.states["MENU"].draw(m_pos)
-                self.current_state.draw(m_pos)
+                self.states["MENU"].draw(m_pos); self.current_state.draw(m_pos)
             else:
                 self.current_state.draw(m_pos)
             
-            pygame.display.flip()
-            pygame.time.Clock().tick(FPS)
+            pygame.display.flip(); pygame.time.Clock().tick(FPS)
 
 if __name__ == "__main__":
     GeneralEngine().run()

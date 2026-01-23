@@ -4,8 +4,9 @@ from icons import draw_nato_icon
 
 class Unit:
     def __init__(self, template, x, y, side, color):
+        self.template = template
         self.name = template.name
-        self.side = side # 1-Gracz, 2-AI
+        self.side = side 
         self.color = color
         self.rank = template.rank
         self.pos = pygame.Vector2(x, y)
@@ -19,9 +20,13 @@ class Unit:
         self.inf_power = template.inf_power
         self.speed = template.speed
         
-        if self.tanks > 0 and self.apc > 0: self.u_type = "ZMECHANIZOWANY"
-        elif self.tanks > 0: self.u_type = "PANCERNY"
-        else: self.u_type = "PIECHOTA"
+        # LOGIKA TYPU IKONY
+        if self.tanks > 0 and self.apc > 0: 
+            self.u_type = "ZMECHANIZOWANY"
+        elif self.tanks > 0: 
+            self.u_type = "PANCERNY" # Tu teraz będzie sama elipsa
+        else: 
+            self.u_type = "PIECHOTA"
 
         self.max_hp = self.soldiers + (self.apc * 5) + (self.tanks * 10) + 1
         self.selected = False
@@ -34,14 +39,12 @@ class Unit:
 
     def update(self, enemies):
         self.in_combat = False
-        # 1. Walka
         for e in enemies:
             if self.pos.distance_to(e.pos) < COMBAT_RANGE:
                 self.in_combat = True
                 self.fight(e)
                 break
         
-        # 2. Ruch i Auto-Engage
         if not self.in_combat:
             if self.side == 1 and self.pos.distance_to(self.target) < 15:
                 nearest = None
@@ -67,12 +70,12 @@ class Unit:
             enemy.soldiers = max(0, enemy.soldiers - dmg)
 
     def draw(self, screen):
-        # Rysuj linię rozkazu TYLKO dla gracza (może wychodzić poza strefę)
         if self.side == 1 and self.pos.distance_to(self.target) > 15:
             l_color = (255, 255, 255) if self.selected else (150, 150, 150)
             pygame.draw.line(screen, l_color, self.pos, self.target, 2)
             pygame.draw.circle(screen, l_color, (int(self.target.x), int(self.target.y)), 4)
 
+        # Używamy ujednoliconego rysowania z icons.py
         draw_nato_icon(screen, self.pos.x, self.pos.y, self.color, self.u_type, self.selected, self.rank)
         
         hp_pct = (self.soldiers + self.apc*5 + self.tanks*10) / self.max_hp
