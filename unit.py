@@ -20,9 +20,12 @@ class Unit:
         self.inf_power = template.inf_power
         self.speed = template.speed
         
-        if self.tanks > 0 and self.apc > 0: self.u_type = "ZMECHANIZOWANY"
-        elif self.tanks > 0: self.u_type = "PANCERNY"
-        else: self.u_type = "PIECHOTA"
+        if "Pancerny" in self.name or "Pancerna" in self.name:
+            self.u_type = "PANCERNY"
+        elif "Zmechanizowany" in self.name or "Zmechanizowana" in self.name:
+            self.u_type = "ZMECHANIZOWANY"
+        else:
+            self.u_type = "PIECHOTA"
 
         self.max_hp = self.soldiers + (self.apc * 5) + (self.tanks * 10) + 1
         self.is_stationary = is_stationary
